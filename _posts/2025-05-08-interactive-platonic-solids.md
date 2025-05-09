@@ -30,8 +30,8 @@ This is an interactive 3D demonstration of Platonic Solids. Use the mouse to rot
         <!-- The canvas where Three.js will render -->
         <canvas id="webgl-canvas" style="display: block; width: 100%; height: 100%;"></canvas>
         <!-- Text Overlay Container -->
-        <div id="text-overlay-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; justify-content: flex-start; align-items: center; padding-left: 20px; z-index: 5;">
-            <div id="text-screen-1" class="text-screen" style="color: #f0f0f0; padding: 20px; max-width: 30%; text-align: left; font-family: 'Roboto Mono', monospace; font-size: 1em; opacity: 0; transition: opacity 1s ease-in-out;">
+        <div id="text-overlay-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 20px; z-index: 5;">
+            <div id="text-screen-1" class="text-screen" style="color: #f0f0f0; padding: 10px 20px; max-width: 85%; text-align: center; font-family: 'Roboto Mono', monospace; font-size: 0.9em; opacity: 0; transition: opacity 1s ease-in-out; background-color: rgba(0,0,0,0.5); border-radius: 4px;">
                 <!-- Text will be injected here by JS -->
             </div>
         </div>

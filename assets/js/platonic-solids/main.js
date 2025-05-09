@@ -31,6 +31,7 @@ let isTextOverlayActive = false; // Flag to track overlay state
 let nextTextBtn; // Reference to the Next navigation button
 let currentTextSegmentIndex = 0;
 let currentSolidName = null;
+let currentSentenceIndex = 0; // For sentence-by-sentence display
 
 // solidPresentations is imported from solid-data.js
 
@@ -41,48 +42,101 @@ let isCamrideActive     = false;
 // Horizontal offset to shift solids to the right (scene units)
 const SHAPE_X_OFFSET = 1.0;
 
+// solidPresentations, TEXT_FADE_DURATION, SENTENCE_DISPLAY_DURATION are imported from solid-data.js
+
 // --- UTILITY FUNCTIONS ---
-// Helper to update text screen content with fade
-function updateTextScreen(segment) {
+// Helper to update text screen content with fade - REMOVED as showSentence and displayTextSegment handle this.
+
+// --- SUBTITLE ENGINE ---
+/**
+ * Displays sentences one by one for the current segment.
+ */
+function showSentence(sentencesArray, sentenceIdx) {
     if (!textScreen1) return;
-    const html = `<strong>${segment.title}</strong><br><br>${segment.content}`;
-    // Fade out then update & fade in
-    textScreen1.style.opacity = '0';
-    setTimeout(() => {
-        textScreen1.innerHTML = html;
-        textScreen1.style.opacity = '1';
-    }, 1000); // match CSS transition duration
+
+    if (sentenceIdx >= sentencesArray.length) {
+        // All sentences of the current segment are shown
+        const presentation = solidPresentations[currentSolidName] || [];
+        if (nextTextBtn) {
+            if (currentTextSegmentIndex < presentation.length - 1) {
+                nextTextBtn.style.opacity = '1';
+                nextTextBtn.style.pointerEvents = 'auto';
+            } else {
+                nextTextBtn.style.opacity = '0';
+                nextTextBtn.style.pointerEvents = 'none';
+            }
+        }
+        return; // End of this segment's sentences
+    }
+
+    const currentSentenceText = sentencesArray[sentenceIdx];
+    textScreen1.innerHTML = currentSentenceText; // Title is not displayed per sentence anymore
+    textScreen1.style.opacity = '1'; // Fade in
+
+    setTimeout(() => { // Duration for sentence to be visible
+        textScreen1.style.opacity = '0'; // Start fade-out
+        setTimeout(() => { // After fade-out completes
+            showSentence(sentencesArray, sentenceIdx + 1); // Show next sentence
+        }, TEXT_FADE_DURATION);
+    }, SENTENCE_DISPLAY_DURATION);
 }
 
+// --- TEXT NAVIGATION & OVERLAY CONTROLS ---
 /**
- * Display a specific text segment (fades using TEXT_FADE_DURATION).
+ * Orchestrates display of a full text segment (camera + sentences).
  */
-function displayTextSegment(shapeName, idx) {
-  const arr = solidPresentations[shapeName] || [];
-  const seg = arr[idx];
-  if (!seg) {
-    if (textScreen1) textScreen1.style.opacity = 0;
-    if (nextTextBtn)  nextTextBtn.style.opacity = 0;
-    return;
-  }
-  // Fade-out then update & fade-in
-  if (textScreen1) textScreen1.style.opacity = 0;
-  setTimeout(() => {
-    if (textScreen1) {
-      textScreen1.innerHTML = `<strong>${seg.title}</strong><br><br>${seg.content}`;
-      textScreen1.style.opacity = 1;
+function displayTextSegment(shapeName, segmentIdx) {
+    const presentation = solidPresentations[shapeName] || [];
+    const segmentData = presentation[segmentIdx];
+
+    if (!segmentData) {
+        console.warn(`No segment data for ${shapeName}, segment ${segmentIdx}`);
+        if (textScreen1) textScreen1.style.opacity = 0;
+        if (nextTextBtn) {
+            nextTextBtn.style.opacity = '0';
+            nextTextBtn.style.pointerEvents = 'none';
+        }
+        return;
     }
-  }, TEXT_FADE_DURATION);
-  // Next button visibility
-  if (nextTextBtn) {
-    if (idx < arr.length - 1) {
-      nextTextBtn.style.opacity = 1;
-      nextTextBtn.style.pointerEvents = 'auto';
+
+    if (segmentData.camera) {
+        startCamrideSegment(segmentData.camera);
+    }
+
+    if (nextTextBtn) {
+        nextTextBtn.style.opacity = '0';
+        nextTextBtn.style.pointerEvents = 'none';
+    }
+
+    if (segmentData.sentences && segmentData.sentences.length > 0) {
+        // Display the segment title once, then start sentences
+        if (textScreen1) { 
+            textScreen1.innerHTML = `<strong>${segmentData.title}</strong>`;
+            textScreen1.style.opacity = '1';
+            setTimeout(() => { // Show title briefly
+                textScreen1.style.opacity = '0';
+                setTimeout(() => {
+                    currentSentenceIndex = 0; 
+                    showSentence(segmentData.sentences, 0);
+                }, TEXT_FADE_DURATION);
+            }, SENTENCE_DISPLAY_DURATION); // Title also uses SENTENCE_DISPLAY_DURATION for now
+        } else {
+             currentSentenceIndex = 0; 
+             showSentence(segmentData.sentences, 0); // Fallback if title display fails
+        }
     } else {
-      nextTextBtn.style.opacity = 0;
-      nextTextBtn.style.pointerEvents = 'none';
+        console.warn(`No sentences for ${shapeName}, segment ${segmentIdx}, but segment exists.`);
+        if (textScreen1) textScreen1.style.opacity = '0'; // Clear if no sentences
+        if (nextTextBtn) {
+            if (segmentIdx < presentation.length - 1) {
+                nextTextBtn.style.opacity = '1';
+                nextTextBtn.style.pointerEvents = 'auto';
+            } else {
+                nextTextBtn.style.opacity = '0';
+                nextTextBtn.style.pointerEvents = 'none';
+            }
+        }
     }
-  }
 }
 
 /**
@@ -150,7 +204,6 @@ function init() {
         nextTextBtn.addEventListener('click', () => {
             currentTextSegmentIndex++;
             displayTextSegment(currentSolidName, currentTextSegmentIndex);
-            startCamrideSegment(solidPresentations[currentSolidName][currentTextSegmentIndex].camera);
         });
     }
 
@@ -271,27 +324,25 @@ function init() {
             button.style.fontFamily = "'Courier New', Courier, monospace";
             button.addEventListener('click', () => {
                 if (isMorphing) return;
-                // Stop any ongoing camride
                 if (currentCameraTween) {
                     currentCameraTween.kill();
                     isCamrideActive = false;
                 }
-                // Prepare new shape
+
                 currentShapeIndex = index;
-                currentSolidName = shapes[index];
+                currentSolidName = shapes[currentShapeIndex];
                 currentTextSegmentIndex = 0;
-                // Randomize particle color theme
+
                 const themeKeys = Object.keys(colorThemes);
                 currentColorTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
                 applyColorTheme();
-                // Hide text/next until segment & camera appear
-                if (textScreen1) textScreen1.style.opacity = 0;
-                if (nextTextBtn)  nextTextBtn.style.opacity = 0; nextTextBtn.style.pointerEvents = 'none';
-                // Trigger morph
-                startMorph();
-                // Immediately show first text & camera
-                displayTextSegment(currentSolidName, 0);
-                startCamrideSegment(solidPresentations[currentSolidName][0].camera);
+
+                if (textScreen1) textScreen1.style.opacity = '0';
+                if (nextTextBtn) {
+                    nextTextBtn.style.opacity = '0';
+                    nextTextBtn.style.pointerEvents = 'none';
+                }
+                startMorph(); // startMorph will call displayTextSegment for segment 0
             });
             shapeSelectorContainer.appendChild(button);
         });
@@ -606,25 +657,8 @@ function startMorph() {
     })
     // At start of contraction phase, show first text segment
     .add(() => {
-        // Display first text segment for the current solid
-        const presentation = solidPresentations[shapes[currentShapeIndex]] || [];
-        if (presentation.length > 0) {
-            currentTextSegmentIndex = 0;
-            const segment = presentation[0];
-            if (textScreen1) {
-                textScreen1.innerHTML = `<strong>${segment.title}</strong><br><br>${segment.content}`;
-                textScreen1.style.opacity = '1';
-            }
-            if (nextTextBtn) {
-                if (presentation.length > 1) {
-                    nextTextBtn.style.opacity = '1';
-                    nextTextBtn.style.pointerEvents = 'auto';
-                } else {
-                    nextTextBtn.style.opacity = '0';
-                    nextTextBtn.style.pointerEvents = 'none';
-                }
-            }
-        }
+        // currentSolidName will have been set by the shape button click
+        displayTextSegment(currentSolidName, 0); 
     })
     // Stage 2: Morph from exploded state to new target shape
     .to({ progress: 0 }, {

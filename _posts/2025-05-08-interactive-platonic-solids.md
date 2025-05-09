@@ -37,8 +37,6 @@ This is an interactive 3D demonstration of Platonic Solids. Use the mouse to rot
         </div>
         <!-- Next button for text navigation -->
         <button id="next-text-btn" style="position: absolute; bottom: 20px; left: 20px; z-index: 10; opacity: 0; pointer-events: none; background-color: rgba(255,255,255,0.8); color: #000; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: opacity 0.5s ease-in-out;">Next Info</button>
-        <!-- Morphing Info still overlays canvas -->
-        <div id="morphing-info" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); min-height: 1em; color: #0f0; z-index: 10; padding: 8px; background-color: rgba(0,0,0,0.6); border-radius: 4px; pointer-events: none;"></div>
     </div>
 
     <!-- Bottom Controls: Display Settings -->

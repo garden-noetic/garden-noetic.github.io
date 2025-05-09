@@ -31,9 +31,10 @@ let isTextOverlayActive = false; // Flag to track overlay state
 let nextTextBtn; // Reference to the Next navigation button
 let currentTextSegmentIndex = 0;
 let currentSolidName = null;
-let currentSentenceIndex = 0; // For sentence-by-sentence display
+// currentSentenceIndex is no longer needed
 
-// solidPresentations is imported from solid-data.js
+// Audio Player
+let currentAudioPlayer = new Audio();
 
 // Camride state
 let currentCameraTween = null;
@@ -51,82 +52,78 @@ const SHAPE_X_OFFSET = 1.0;
 /**
  * Displays sentences one by one for the current segment.
  */
-function showSentence(sentencesArray, sentenceIdx) {
-    if (!textScreen1) return;
-
-    if (sentenceIdx >= sentencesArray.length) {
-        // All sentences of the current segment are shown
-        const presentation = solidPresentations[currentSolidName] || [];
-        if (nextTextBtn) {
-            if (currentTextSegmentIndex < presentation.length - 1) {
-                nextTextBtn.style.opacity = '1';
-                nextTextBtn.style.pointerEvents = 'auto';
-            } else {
-                nextTextBtn.style.opacity = '0';
-                nextTextBtn.style.pointerEvents = 'none';
-            }
-        }
-        return; // End of this segment's sentences
-    }
-
-    const currentSentenceText = sentencesArray[sentenceIdx];
-    textScreen1.innerHTML = currentSentenceText; // Title is not displayed per sentence anymore
-    textScreen1.style.opacity = '1'; // Fade in
-
-    setTimeout(() => { // Duration for sentence to be visible
-        textScreen1.style.opacity = '0'; // Start fade-out
-        setTimeout(() => { // After fade-out completes
-            showSentence(sentencesArray, sentenceIdx + 1); // Show next sentence
-        }, TEXT_FADE_DURATION);
-    }, SENTENCE_DISPLAY_DURATION);
-}
+// function showSentence(sentencesArray, sentenceIdx) { ... } // DELETE THIS FUNCTION
 
 // --- TEXT NAVIGATION & OVERLAY CONTROLS ---
 /**
- * Orchestrates display of a full text segment (camera + sentences).
+ * Orchestrates display of a full text segment (camera + text + audio).
  */
 function displayTextSegment(shapeName, segmentIdx) {
+    // Ensure solidPresentations is available (loaded from solid-data.js)
+    if (typeof solidPresentations === 'undefined' || !solidPresentations[shapeName]) {
+        console.error(`solidPresentations not loaded or shape ${shapeName} not found.`);
+        return;
+    }
+
     const presentation = solidPresentations[shapeName] || [];
     const segmentData = presentation[segmentIdx];
 
     if (!segmentData) {
         console.warn(`No segment data for ${shapeName}, segment ${segmentIdx}`);
-        if (textScreen1) textScreen1.style.opacity = 0;
+        if (textScreen1) textScreen1.style.opacity = '0';
         if (nextTextBtn) {
             nextTextBtn.style.opacity = '0';
             nextTextBtn.style.pointerEvents = 'none';
         }
+        // Stop audio if no segment data
+        if (currentAudioPlayer && !currentAudioPlayer.paused) {
+            currentAudioPlayer.pause();
+            currentAudioPlayer.currentTime = 0;
+        }
         return;
     }
 
+    // 1. Camera Movement
     if (segmentData.camera) {
         startCamrideSegment(segmentData.camera);
     }
 
-    if (nextTextBtn) {
-        nextTextBtn.style.opacity = '0';
-        nextTextBtn.style.pointerEvents = 'none';
+    // 2. Stop and Reset Previous Audio
+    if (currentAudioPlayer && !currentAudioPlayer.paused) {
+        currentAudioPlayer.pause();
+        currentAudioPlayer.currentTime = 0;
     }
 
-    if (segmentData.sentences && segmentData.sentences.length > 0) {
-        // Display the segment title once, then start sentences
+    // 3. Text Display
         if (textScreen1) { 
-            textScreen1.innerHTML = `<strong>${segmentData.title}</strong>`;
-            textScreen1.style.opacity = '1';
-            setTimeout(() => { // Show title briefly
-                textScreen1.style.opacity = '0';
-                setTimeout(() => {
-                    currentSentenceIndex = 0; 
-                    showSentence(segmentData.sentences, 0);
-                }, TEXT_FADE_DURATION);
-            }, SENTENCE_DISPLAY_DURATION); // Title also uses SENTENCE_DISPLAY_DURATION for now
+        if (segmentData.title && segmentData.content) {
+            textScreen1.style.opacity = '0'; // Start fade out / ensure hidden
+            setTimeout(() => { // Allow current text to fade out before changing content
+                textScreen1.innerHTML = `<strong>${segmentData.title}</strong><br>${segmentData.content}`;
+                textScreen1.style.opacity = '1'; // Fade in new text
+            }, TEXT_FADE_DURATION / 2); // Adjust timing as needed
         } else {
-             currentSentenceIndex = 0; 
-             showSentence(segmentData.sentences, 0); // Fallback if title display fails
+            textScreen1.innerHTML = ''; // Clear text if no title/content
+            textScreen1.style.opacity = '0';
+            console.warn(`Segment for ${shapeName}, index ${segmentIdx} missing title or content.`);
         }
     } else {
-        console.warn(`No sentences for ${shapeName}, segment ${segmentIdx}, but segment exists.`);
-        if (textScreen1) textScreen1.style.opacity = '0'; // Clear if no sentences
+        console.error('textScreen1 element not found.');
+    }
+
+    // 4. Audio Playback
+    if (segmentData.audioFile) {
+        currentAudioPlayer.src = segmentData.audioFile;
+        console.log(`Playing audio for segment: ${segmentData.audioFile}`);
+        currentAudioPlayer.play().catch(error => {
+            console.error(`Error attempting to play audio ${segmentData.audioFile}:`, error);
+            // Optionally, provide a UI element to manually start audio if autoplay fails
+        });
+    } else {
+        console.warn(`No audioFile for ${shapeName}, segment ${segmentIdx}`);
+    }
+
+    // 5. Next Button Visibility
         if (nextTextBtn) {
             if (segmentIdx < presentation.length - 1) {
                 nextTextBtn.style.opacity = '1';
@@ -134,7 +131,6 @@ function displayTextSegment(shapeName, segmentIdx) {
             } else {
                 nextTextBtn.style.opacity = '0';
                 nextTextBtn.style.pointerEvents = 'none';
-            }
         }
     }
 }
@@ -203,7 +199,12 @@ function init() {
     if (nextTextBtn) {
         nextTextBtn.addEventListener('click', () => {
             currentTextSegmentIndex++;
+            // currentSolidName should be correctly set when a shape is selected
+            if (currentSolidName) {
             displayTextSegment(currentSolidName, currentTextSegmentIndex);
+            } else {
+                console.warn("Next button clicked but no currentSolidName set.");
+            }
         });
     }
 
@@ -430,6 +431,21 @@ function init() {
         });
     }
 
+    // Setup Audio Player Event Listeners (once)
+    currentAudioPlayer.onended = () => {
+        // Use currentAudioPlayer.src as segmentData.audioFile might be out of scope if called later
+        console.log(`Audio finished: ${currentAudioPlayer.src}`);
+        // TODO: In Phase 4, this is where we'd trigger the 'Next Info' logic automatically.
+        // For example, if not the last segment, automatically click 'nextTextBtn' or call relevant function:
+        // const presentation = solidPresentations[currentSolidName] || [];
+        // if (currentTextSegmentIndex < presentation.length - 1) {
+        //     nextTextBtn.click(); // Or directly call: currentTextSegmentIndex++; displayTextSegment(currentSolidName, currentTextSegmentIndex);
+        // }
+    };
+    currentAudioPlayer.onerror = (e) => {
+        console.error(`Error during audio playback ${currentAudioPlayer.src}:`, e);
+    };
+
     // 9. Start Animation
     animate();
 }
@@ -603,6 +619,14 @@ function generateSphereExplodePositions(targetArray, radius) {
 // --- MORPHING LOGIC ---
 function startMorph() {
     if (isMorphing) return;
+
+    // Stop any active audio playback when a morph starts
+    if (currentAudioPlayer && !currentAudioPlayer.paused) {
+        currentAudioPlayer.pause();
+        currentAudioPlayer.currentTime = 0;
+        console.log("Audio stopped due to morph initiation.");
+    }
+
     isMorphing = true;
     if (wireframeMesh) wireframeMesh.visible = false; // Hide wireframe at start of morph
 

@@ -4,4 +4,10 @@ _site
 .jekyll-metadata
 vendor
 
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Google Cloud Credentials
 assets/js/platonic-solids/credentials/

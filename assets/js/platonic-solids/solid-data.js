@@ -23,173 +23,121 @@ const solidPresentations = {
   "Tetrahedron": [
     {
       title: "The Tetrahedron: Spark of Fire",
-      sentences: [
-        "The simplest Platonic Solid, embodying sharpness and mobility.",
-        "Ancient philosophers, like Plato, linked its pointed form to the element of Fire, seeing it as the fundamental building block of this dynamic force."
-      ],
-      camera: { position: new THREE.Vector3(0, 0.8, 2.8), target: new THREE.Vector3(0, 0.1, 0) }
+      content: "The simplest Platonic Solid, embodying sharpness and mobility. Ancient philosophers, like Plato, linked its pointed form to the element of Fire, seeing it as the fundamental building block of this dynamic force.",
+      camera: { position: new THREE.Vector3(0, 0.8, 2.8), target: new THREE.Vector3(0, 0.1, 0) },
+      audioFile: "/assets/audio/platonic-solids/tetrahedron_segment_0.mp3"
     },
     {
       title: "Tetrahedron: Geometric Blueprint",
-      sentences: [
-        "Faces: 4 Equilateral Triangles.",
-        "Vertices: 4 (3 faces meet at each).",
-        "Edges: 6.",
-        "Dihedral Angle (between faces): ~70.53°.",
-        "It is uniquely self-dual – its dual polyhedron is another tetrahedron."
-      ],
-      camera: { position: new THREE.Vector3(1.8, 1.2, 1.8), target: new THREE.Vector3(0, 0, 0) }
+      content: "Faces: 4 Equilateral Triangles. Vertices: 4 (3 faces meet at each). Edges: 6. Dihedral Angle (between faces): ~70.53°. It is uniquely self-dual – its dual polyhedron is another tetrahedron.",
+      camera: { position: new THREE.Vector3(1.8, 1.2, 1.8), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/tetrahedron_segment_1.mp3"
     },
     {
       title: "Tetrahedron: Noetic Resonance",
-      sentences: [
-        "Symbolizes balance, the initial point of manifestation, and the power of the trinity unfolding into the first stable 3D form.",
-        "Its structure is foundational in nature, from molecular bonds to energetic theories."
-      ],
-      camera: { position: new THREE.Vector3(-0.5, -0.7, 2.5), target: new THREE.Vector3(0, -0.2, 0) }
+      content: "Symbolizes balance, the initial point of manifestation, and the power of the trinity unfolding into the first stable 3D form. Its structure is foundational in nature, from molecular bonds to energetic theories.",
+      camera: { position: new THREE.Vector3(-0.5, -0.7, 2.5), target: new THREE.Vector3(0, -0.2, 0) },
+      audioFile: "/assets/audio/platonic-solids/tetrahedron_segment_2.mp3"
     }
   ],
   "Cube": [
     {
       title: "The Cube (Hexahedron): Foundation of Earth",
-      sentences: [
-        "A symbol of stability and grounding.",
-        "Plato associated the cube with the element of Earth due to its firm base and ability to sit solidly, representing the material world."
-      ],
-      camera: { position: new THREE.Vector3(2, 2, 2), target: new THREE.Vector3(0, 0, 0) }
+      content: "A symbol of stability and grounding. Plato associated the cube with the element of Earth due to its firm base and ability to sit solidly, representing the material world.",
+      camera: { position: new THREE.Vector3(2, 2, 2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/cube_segment_0.mp3"
     },
     {
       title: "Cube: Geometric Blueprint",
-      sentences: [
-        "Faces: 6 Squares.",
-        "Vertices: 8 (3 faces meet at each).",
-        "Edges: 12.",
-        "Dihedral Angle: 90°.",
-        "Its dual is the Octahedron.",
-        "All angles are right angles, making it a cornerstone of rectilinear geometry."
-      ],
-      camera: { position: new THREE.Vector3(-2, 2, 2), target: new THREE.Vector3(0, 0, 0) }
+      content: "Faces: 6 Squares. Vertices: 8 (3 faces meet at each). Edges: 12. Dihedral Angle: 90°. Its dual is the Octahedron. All angles are right angles, making it a cornerstone of rectilinear geometry.",
+      camera: { position: new THREE.Vector3(-2, 2, 2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/cube_segment_1.mp3"
     },
     {
       title: "Cube: Noetic Resonance",
-      sentences: [
-        "Represents order, structure, and divine law manifesting in physical reality.",
-        "It signifies the framework upon which the tangible world is built, a symbol of integrity and dependable form."
-      ],
-      camera: { position: new THREE.Vector3(2, -2, 2), target: new THREE.Vector3(0, 0, 0) }
+      content: "Represents order, structure, and divine law manifesting in physical reality. It signifies the framework upon which the tangible world is built, a symbol of integrity and dependable form.",
+      camera: { position: new THREE.Vector3(2, -2, 2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/cube_segment_2.mp3"
     }
   ],
   "Octahedron": [
     {
       title: "The Octahedron: Crystal of Air",
-      sentences: [
-        "Composed of two square pyramids joined at their bases, the Octahedron was linked by Plato to the element of Air, its smooth form allowing it to spin and flow freely."
-      ],
-      camera: { position: new THREE.Vector3(0, 3, 0), target: new THREE.Vector3(0, 0, 0) }
+      content: "Composed of two square pyramids joined at their bases, the Octahedron was linked by Plato to the element of Air, its smooth form allowing it to spin and flow freely.",
+      camera: { position: new THREE.Vector3(0, 3, 0), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/octahedron_segment_0.mp3"
     },
     {
       title: "Octahedron: Geometric Blueprint",
-      sentences: [
-        "Faces: 8 Equilateral Triangles.",
-        "Vertices: 6 (4 faces meet at each).",
-        "Edges: 12.",
-        "Dihedral Angle: ~109.47°.",
-        "Its dual is the Cube.",
-        "It can be seen as perfectly balanced and symmetrical."
-      ],
-      camera: { position: new THREE.Vector3(2.5, 1.5, -1), target: new THREE.Vector3(0, 0, 0) }
+      content: "Faces: 8 Equilateral Triangles. Vertices: 6 (4 faces meet at each). Edges: 12. Dihedral Angle: ~109.47°. Its dual is the Cube. It can be seen as perfectly balanced and symmetrical.",
+      camera: { position: new THREE.Vector3(2.5, 1.5, -1), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/octahedron_segment_1.mp3"
     },
     {
       title: "Octahedron: Noetic Resonance",
-      sentences: [
-        "Symbolizes integration, the balance of spirit and matter, reflection (as above, so below), and the heart's wisdom.",
-        "It is often seen as a crystal of healing and perfect equilibrium."
-      ],
-      camera: { position: new THREE.Vector3(-1.5, 2, -2), target: new THREE.Vector3(0, 0, 0) }
+      content: "Symbolizes integration, the balance of spirit and matter, reflection (as above, so below), and the heart\'s wisdom. It is often seen as a crystal of healing and perfect equilibrium.",
+      camera: { position: new THREE.Vector3(-1.5, 2, -2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/octahedron_segment_2.mp3"
     }
   ],
   "Dodecahedron": [
     {
       title: "The Dodecahedron: Vessel of the Cosmos",
-      sentences: [
-        "With its twelve pentagonal faces, Plato considered the Dodecahedron to be the model used by the Creator to arrange the constellations, representing the Universe or Aether itself."
-      ],
-      camera: { position: new THREE.Vector3(3, 0, 1), target: new THREE.Vector3(0, 0, 0) }
+      content: "With its twelve pentagonal faces, Plato considered the Dodecahedron to be the model used by the Creator to arrange the constellations, representing the Universe or Aether itself.",
+      camera: { position: new THREE.Vector3(3, 0, 1), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/dodecahedron_segment_0.mp3"
     },
     {
       title: "Dodecahedron: Geometric Blueprint",
-      sentences: [
-        "Faces: 12 Regular Pentagons.",
-        "Vertices: 20 (3 faces meet at each).",
-        "Edges: 30.",
-        "Dihedral Angle: ~116.57°.",
-        "Its dual is the Icosahedron.",
-        "Contains proportions related to the Golden Ratio."
-      ],
-      camera: { position: new THREE.Vector3(1, 3, 1), target: new THREE.Vector3(0, 0, 0) }
+      content: "Faces: 12 Regular Pentagons. Vertices: 20 (3 faces meet at each). Edges: 30. Dihedral Angle: ~116.57°. Its dual is the Icosahedron. Contains proportions related to the Golden Ratio.",
+      camera: { position: new THREE.Vector3(1, 3, 1), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/dodecahedron_segment_1.mp3"
     },
     {
       title: "Dodecahedron: Noetic Resonance",
-      sentences: [
-        "Represents divine thought, universal consciousness, and the interconnectedness of all things.",
-        "Its form is linked to higher dimensions and the subtle energies that weave through creation."
-      ],
-      camera: { position: new THREE.Vector3(-1, 1, 3), target: new THREE.Vector3(0, 0, 0) }
+      content: "Represents divine thought, universal consciousness, and the interconnectedness of all things. Its form is linked to higher dimensions and the subtle energies that weave through creation.",
+      camera: { position: new THREE.Vector3(-1, 1, 3), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/dodecahedron_segment_2.mp3"
     }
   ],
   "Icosahedron": [
     {
       title: "The Icosahedron: Flow of Water",
-      sentences: [
-        "The most complex of the Platonic solids in terms of faces, Plato associated the Icosahedron with the element of Water, as it is the solid that would roll and flow most easily."
-      ],
-      camera: { position: new THREE.Vector3(0, -3, 0), target: new THREE.Vector3(0, 0, 0) }
+      content: "The most complex of the Platonic solids in terms of faces, Plato associated the Icosahedron with the element of Water, as it is the solid that would roll and flow most easily.",
+      camera: { position: new THREE.Vector3(0, -3, 0), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/icosahedron_segment_0.mp3"
     },
     {
       title: "Icosahedron: Geometric Blueprint",
-      sentences: [
-        "Faces: 20 Equilateral Triangles.",
-        "Vertices: 12 (5 faces meet at each).",
-        "Edges: 30.",
-        "Dihedral Angle: ~138.19°.",
-        "Its dual is the Dodecahedron.",
-        "Exhibits a high degree of symmetry and efficiency of form."
-      ],
-      camera: { position: new THREE.Vector3(2, -1, 2), target: new THREE.Vector3(0, 0, 0) }
+      content: "Faces: 20 Equilateral Triangles. Vertices: 12 (5 faces meet at each). Edges: 30. Dihedral Angle: ~138.19°. Its dual is the Dodecahedron. Exhibits a high degree of symmetry and efficiency of form.",
+      camera: { position: new THREE.Vector3(2, -1, 2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/icosahedron_segment_1.mp3"
     },
     {
       title: "Icosahedron: Noetic Resonance",
-      sentences: [
-        "Symbolizes transformation, movement, and the dynamic flow of energy and emotion.",
-        "It is often associated with creative potential, adaptability, and going with the stream of life."
-      ],
-      camera: { position: new THREE.Vector3(-2, -1, 2), target: new THREE.Vector3(0, 0, 0) }
+      content: "Symbolizes transformation, movement, and the dynamic flow of energy and emotion. It is often associated with creative potential, adaptability, and going with the stream of life.",
+      camera: { position: new THREE.Vector3(-2, -1, 2), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/icosahedron_segment_2.mp3"
     }
   ],
   "Sphere": [
     {
       title: "The Sphere: Unity and Wholeness",
-      sentences: [
-        "While not a Platonic Solid (it lacks flat faces and straight edges), the Sphere is the ultimate expression of unity, completeness, and equality in all directions from its center."
-      ],
-      camera: { position: new THREE.Vector3(0, 0, 4), target: new THREE.Vector3(0, 0, 0) }
+      content: "While not a Platonic Solid (it lacks flat faces and straight edges), the Sphere is the ultimate expression of unity, completeness, and equality in all directions from its center.",
+      camera: { position: new THREE.Vector3(0, 0, 4), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/sphere_segment_0.mp3"
     },
     {
       title: "Sphere: Geometric Blueprint",
-      sentences: [
-        "A perfectly round geometrical object in three-dimensional space that is the surface of a completely round ball.",
-        "All points on its surface are equidistant from its center.",
-        "Infinite rotational symmetry."
-      ],
-      camera: { position: new THREE.Vector3(3, 0, 0), target: new THREE.Vector3(0, 0, 0) }
+      content: "A perfectly round geometrical object in three-dimensional space that is the surface of a completely round ball. All points on its surface are equidistant from its center. Infinite rotational symmetry.",
+      camera: { position: new THREE.Vector3(3, 0, 0), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/sphere_segment_1.mp3"
     },
     {
       title: "Sphere: Noetic Resonance",
-      sentences: [
-        "Represents the void and potentiality, the 'All-That-Is,' totality, and the encompassing nature of consciousness.",
-        "It is often seen as a symbol of the soul, the cosmos, and boundless being."
-      ],
-      camera: { position: new THREE.Vector3(0, 3, 0), target: new THREE.Vector3(0, 0, 0) }
+      content: "Represents the void and potentiality, the \'All-That-Is,\' totality, and the encompassing nature of consciousness. It is often seen as a symbol of the soul, the cosmos, and boundless being.",
+      camera: { position: new THREE.Vector3(0, 3, 0), target: new THREE.Vector3(0, 0, 0) },
+      audioFile: "/assets/audio/platonic-solids/sphere_segment_2.mp3"
     }
   ]
 }; 
